@@ -1,5 +1,5 @@
 [build]
-  command = "cd backend && npm i && cd.. && cd frontend && npm i && npm run build"
+  command = "cd backend && npm i && cd .. && cd frontend && npm i && npm run build"
   publish = "frontend/dist"
 
 [functions]
