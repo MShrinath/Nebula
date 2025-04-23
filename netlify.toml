@@ -1,0 +1,20 @@
+[build]
+  command = "npm run build"
+  publish = "frontend/dist"
+
+[functions]
+  directory = "backend/api"
+  external_node_modules = [
+    "express",
+    "serverless-http",
+    "sqlite3",
+    "cors",
+    "bcrypt",
+    "dotenv"
+  ]
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
