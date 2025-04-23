@@ -21,10 +21,10 @@ if (!fs.existsSync(dbDir)) {
 // Database connection
 const dbPath = path.join(dbDir, "database.sqlite");
 
-// Only delete DB if not on Netlify (for dev)
-if (!process.env.NETLIFY && fs.existsSync(dbPath)) {
-  fs.unlinkSync(dbPath);
-}
+// // Only delete DB if not on Netlify (for dev)
+// if (!process.env.NETLIFY && fs.existsSync(dbPath)) {
+//   fs.unlinkSync(dbPath);
+// }
 
 const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
