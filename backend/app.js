@@ -13,18 +13,12 @@ app.use(cors());
 app.use(express.json());
 
 // Ensure database directory exists (use /tmp for Netlify)
-const dbDir = process.env.NETLIFY ? '/tmp/database' : path.join(__dirname, '../../backend/database');
-if (!fs.existsSync(dbDir)) {
-  fs.mkdirSync(dbDir, { recursive: true });
-}
-
-// Database connection
-const dbPath = path.join(dbDir, "database.sqlite");
+const dbPath = process.env.NETLIFY ? '/tmp/database.sqlite' : path.join(__dirname, 'database.sqlite');
 
 // // Only delete DB if not on Netlify (for dev)
-// if (!process.env.NETLIFY && fs.existsSync(dbPath)) {
-//   fs.unlinkSync(dbPath);
-// }
+if (!process.env.NETLIFY && fs.existsSync(dbPath)) {
+  fs.unlinkSync(dbPath);
+}
 
 const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
@@ -35,18 +29,18 @@ const db = new sqlite3.Database(dbPath, (err) => {
   
   // clean all tables
   db.serialize(() => {
-    db.run("DROP TABLE IF EXISTS posts", (err) => {
-      if (err) {
-        console.error("Error dropping posts table:", err);
-      } else {
-        console.log("Posts table dropped successfully");
-      }
-    });
     db.run("DROP TABLE IF EXISTS users", (err) => {
       if (err) {
         console.error("Error dropping users table:", err);
       } else {
         console.log("Users table dropped successfully");
+      }
+    });
+    db.run("DROP TABLE IF EXISTS posts", (err) => {
+      if (err) {
+        console.error("Error dropping posts table:", err);
+      } else {
+        console.log("Posts table dropped successfully");
       }
     });
   });
@@ -308,4 +302,7 @@ app.get('/api/admin/users', isAdmin, (req, res) => {
   });
 });
 
-module.exports = app;
+// module.exports = app;
+app.listen(3000, () => {
+  console.log(`Server running on port 3000`);
+});
