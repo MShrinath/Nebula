@@ -33,6 +33,24 @@ const db = new sqlite3.Database(dbPath, (err) => {
   }
   console.log("Connected to the SQLite database.");
   
+  // clean all tables
+  db.serialize(() => {
+    db.run("DROP TABLE IF EXISTS posts", (err) => {
+      if (err) {
+        console.error("Error dropping posts table:", err);
+      } else {
+        console.log("Posts table dropped successfully");
+      }
+    });
+    db.run("DROP TABLE IF EXISTS users", (err) => {
+      if (err) {
+        console.error("Error dropping users table:", err);
+      } else {
+        console.log("Users table dropped successfully");
+      }
+    });
+  });
+
   // Create tables
   db.serialize(() => {
     // Users table
