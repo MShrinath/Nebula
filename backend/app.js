@@ -12,17 +12,17 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Ensure database directory exists (use /tmp for Netlify)
-const dbDir = process.env.NETLIFY ? '/tmp/database' : path.join(__dirname, '../../backend/database');
+// Ensure database directory exists
+const dbDir = path.join(__dirname, "database");
 if (!fs.existsSync(dbDir)) {
-  fs.mkdirSync(dbDir, { recursive: true });
+  fs.mkdirSync(dbDir);
 }
 
 // Database connection
 const dbPath = path.join(dbDir, "database.sqlite");
 
-// Only delete DB if not on Netlify (for dev)
-if (!process.env.NETLIFY && fs.existsSync(dbPath)) {
+// Delete existing database file if it exists
+if (fs.existsSync(dbPath)) {
   fs.unlinkSync(dbPath);
 }
 
