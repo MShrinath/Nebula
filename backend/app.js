@@ -12,14 +12,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Ensure database directory exists (use /tmp for Netlify)
-// const dbPath = process.env.NETLIFY ? '/tmp/database.sqlite' : path.join(__dirname, 'database.sqlite');
 const dbPath = path.join(__dirname, 'database.sqlite');
-
-// // Only delete DB if not on Netlify (for dev)
-if (!process.env.NETLIFY && fs.existsSync(dbPath)) {
-  fs.unlinkSync(dbPath);
-}
 
 const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
@@ -174,9 +167,7 @@ app.post('/api/login', (req, res) => {
 
 // Add logout endpoint
 app.post('/api/logout', (req, res) => {
-  // Since we're using stateless authentication, we just return a success message
-  // The frontend will handle clearing the stored user data
-  res.json({ message: 'Logged out successfully' });
+  res.status(200).json({ message: 'Logged out successfully' });
 });
 
 app.get('/api/profile/:id', (req, res) => {
@@ -190,7 +181,7 @@ app.get('/api/profile/:id', (req, res) => {
       res.status(404).json({ error: 'User not found' });
       return;
     }
-    res.json(user);
+    res.status(200).json(user);
   });
 });
 
@@ -202,7 +193,7 @@ app.put('/api/profile/:id', (req, res) => {
       res.status(400).json({ error: err.message });
       return;
     }
-    res.json({ message: 'Profile updated successfully' });
+    res.status(200).json({ message: 'Profile updated successfully' });
   });
 });
 
@@ -219,7 +210,7 @@ app.get('/api/posts', (req, res) => {
       res.status(400).json({ error: err.message });
       return;
     }
-    res.json(posts);
+    res.status(200).json(posts);
   });
 });
 
@@ -233,7 +224,7 @@ app.get('/api/posts/user/:userId', (req, res) => {
         res.status(400).json({ error: err.message });
         return;
       }
-      res.json(posts);
+      res.status(200).json(posts);
     }
   );
 });
@@ -258,16 +249,16 @@ app.post('/api/posts', (req, res) => {
       // Get the newly created post with username
       db.get(
         `SELECT posts.*, users.username 
-         FROM posts 
-         JOIN users ON posts.userId = users.id 
-         WHERE posts.id = ?`,
+          FROM posts 
+          JOIN users ON posts.userId = users.id 
+          WHERE posts.id = ?`,
         [this.lastID],
         (err, post) => {
           if (err) {
             res.status(400).json({ error: err.message });
             return;
           }
-          res.json(post);
+          res.status(200).json(post);
         }
       );
     }
@@ -299,7 +290,7 @@ app.get('/api/admin/users', isAdmin, (req, res) => {
       res.status(400).json({ error: err.message });
       return;
     }
-    res.json(users);
+    res.status(200).json(users);
   });
 });
 
