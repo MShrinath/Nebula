@@ -2,7 +2,7 @@ const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const bcrypt = require('bcrypt');
 
-const dbPath = path.join(__dirname, 'database.sqlite');
+const dbPath = path.resolve('database.sqlite');
 const db = new sqlite3.Database(dbPath);
 
 exports.handler = async function(event, context) {
