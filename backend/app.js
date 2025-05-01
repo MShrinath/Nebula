@@ -14,7 +14,7 @@ app.use(express.json());
 
 // Ensure database directory exists (use /tmp for Netlify)
 // const dbPath = process.env.NETLIFY ? '/tmp/database.sqlite' : path.join(__dirname, 'database.sqlite');
-const dbPath = path.join(__dirname, '/tmp/database.sqlite');
+const dbPath = path.join(__dirname, 'database.sqlite');
 
 // // Only delete DB if not on Netlify (for dev)
 if (!process.env.NETLIFY && fs.existsSync(dbPath)) {
